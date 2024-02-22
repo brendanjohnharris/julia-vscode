@@ -2,6 +2,7 @@ import * as os from 'os'
 import * as path from 'path'
 import * as vscode from 'vscode'
 import * as vslc from 'vscode-languageclient'
+import fs from 'fs'
 import { VersionedTextDocumentPositionParams } from './interactive/misc'
 import { handleNewCrashReportFromException } from './telemetry'
 
@@ -26,7 +27,12 @@ export function generatePipeName(pid: string, name: string) {
         return '\\\\.\\pipe\\' + name + '-' + pid
     }
     else {
-        return path.join(os.tmpdir(), name + '-' + pid)
+        // return path.join(os.tmpdir(), name + '-' + pid)
+        var dir = '~/tmp'
+        fs.mkdir(dir, { recursive: true }, (err) => {
+            if (err) throw err;
+        });
+        return path.join(dir, name + '-' + pid)
     }
 }
 
